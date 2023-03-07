@@ -24,7 +24,7 @@ def pdf_to_image(file_path: Path, output_folder: Path, dpi: int):
 
 def main(dir_path: str, out_dir: str, dpi: int = 400) -> None:
     # create output folder if not existed
-    os.makedirs(os.path.dirname(out_dir), exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
     # For display usage
     file_length = len(os.listdir(dir_path))
     count = 0

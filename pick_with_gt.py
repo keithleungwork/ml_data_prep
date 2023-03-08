@@ -19,24 +19,28 @@ def main(source_folder: str, gt_folder: str, destination_folder: str):
 
     # Get a list of all PDF files in the source folder
     files = os.listdir(source_folder)
-    files_dict = { Path(x).with_suffix("") : x for x in files }
+    files_dict = { str(Path(x).with_suffix("")) : x for x in files }
     # get a list of all ground truth files in gt folder
     gt_files = os.listdir(gt_folder)
+    for i, x in enumerate(gt_files):
+        # remove extension
+        x = Path(x).with_suffix("")
+        gt_files[i] = "-".join(str(x).split("-")[:-1])
+    gt_files = set(gt_files)
 
     # Copy the specified number of PDF files to the destination folder
     copied_files = []
-    for gt_file in gt_files:
-        # remove extension
-        gt_name = Path(gt_file).with_suffix("")
+    for gt_name in gt_files:
         # check if this file exists in src folder
         if gt_name in files_dict:
+            print(f"\rChecking {len(copied_files)}/{len(gt_files)} ...", end="")
             # prepare full path
             source_file = os.path.join(source_folder, files_dict[gt_name])
             destination_file = os.path.join(destination_folder, files_dict[gt_name])
             # copy this file to destination
             shutil.copy2(source_file, destination_file)
             copied_files.append(files_dict[gt_name])
-
+    print("")
     return copied_files
 
 
